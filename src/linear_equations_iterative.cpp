@@ -11,11 +11,11 @@ void iterative_method::print() const {
 Jacobi::Jacobi(const vector<vector<double>>& A, const vector<double>& b, double diff):iterative_method(A,b,diff){}
 void Jacobi::solve() {
     ans.resize(n, 0);
-    vector<double> prev_ans(n, 0);  // ´æ´¢ÉÏÒ»´Îµü´ú½á¹û
+    vector<double> prev_ans(n, 0);  // Store the previous iteration result
     const int max_iterations = 1000;
     for (int iter = 0; iter < max_iterations; ++iter) {
-        vector<double> new_ans(n, 0);  // ´æ´¢µ±Ç°µü´ú½á¹û
-        // Jacobi µü´ú
+        vector<double> new_ans(n, 0);  // Store the current iteration result
+        // Jacobi iteration
         for (int i = 0; i < n; ++i) {
             double sum = 0.0;
             for (int j = 0; j < n; ++j) {
@@ -25,7 +25,7 @@ void Jacobi::solve() {
             }
             new_ans[i] = (m_B[i] - sum) / m_A[i][i];
         }
-        // ¼ÆËãÁ½´Îµü´ú½á¹ûµÄ×î´ó²îÖµ
+        // Compute the maximum difference between iterations
         double max_diff = 0.0;
         for (int i = 0; i < n; ++i) {
             double diff = abs(new_ans[i] - prev_ans[i]);
@@ -33,26 +33,26 @@ void Jacobi::solve() {
                 max_diff = diff;
             }
         }
-        ans = new_ans;  // ¸üÐÂ×îÖÕ½á¹û
-        prev_ans = new_ans;  // ÎªÏÂÒ»´Îµü´ú×¼±¸
-        // ÊÕÁ²ÅÐ¶Ï
+        ans = new_ans;  // Update the final result
+        prev_ans = new_ans;  // Prepare for the next iteration
+        // Convergence check
         if (max_diff < differ) {
-            cout << "Jacobi ·½·¨ÊÕÁ²ÓÚµÚ " << iter + 1 << " ´Îµü´ú" << endl;
+            cout << "Jacobi converged at iteration " << iter + 1 << " iterations" << endl;
             return;
         }
     }
-    cout << "¾¯¸æ£ºJacobi ·½·¨Î´ÔÚ " << max_iterations << " ´Îµü´úÄÚÊÕÁ²" << endl;
+    cout << "Warning: Jacobi did not converge within " << max_iterations << " iterationsiterations" << endl;
 }
 
 Gauss_Seidel::Gauss_Seidel(const vector<vector<double>>& A, const vector<double>& b, double diff) :iterative_method(A, b, diff) {};
 void Gauss_Seidel::solve() {
     ans.resize(n, 0);
     vector<double> prev_ans(n, 0);
-    int max_iterations = 1000;  // ×î´óµü´ú´ÎÊý
+    int max_iterations = 1000;  // Maximum number of iterations
 
     for (int iter = 0; iter < max_iterations; ++iter) {
-        prev_ans = ans;  // ±£´æÉÏÒ»´Îµü´ú½á¹û
-        // Gauss-Seidel µü´ú
+        prev_ans = ans;  // Save the previous iteration result
+        // Gauss-Seidel iteration
         for (int i = 0; i < n; ++i) {
             double sum = m_B[i];
             for (int j = 0; j < n; ++j) {
@@ -62,54 +62,54 @@ void Gauss_Seidel::solve() {
             }
             ans[i] = sum / m_A[i][i];
         }
-        // ¼ì²éÊÕÁ²
+        // Check convergence
         double max_error = 0.0;
         for (int i = 0; i < n; ++i) {
             max_error = std::max(max_error, std::abs(ans[i] - prev_ans[i]));
         }
         if (max_error < differ) {
-            cout << "Gauss-Seidel ÊÕÁ²ÓÚµÚ " << iter + 1 << " ´Îµü´ú" << endl;
+            cout << "Gauss-Seidel converged at iteration " << iter + 1 << " iterations" << endl;
             return;
         }
     }
-    cout << "¾¯¸æ£ºÎ´ÔÚ×î´óµü´ú´ÎÊýÄÚÊÕÁ²" << endl;
+    cout << "Warning: Gauss-Seidel did not converge within the iteration limit" << endl;
 }
 
 SOR::SOR(const vector<vector<double>>& A, const vector<double>& b, double diff, double w)
     : iterative_method(A, b, diff), omega(w) {
-    // ¼ì²éËÉ³ÚÒò×ÓÊÇ·ñºÏÀí
+    // Check whether the relaxation factor is valid
     if (omega <= 0 || omega >= 2) {
-        cout << "¾¯¸æ£ºËÉ³ÚÒò×Ó omega Ó¦ÔÚ (0,2) ·¶Î§ÄÚ£¬µ±Ç°Öµ: " << omega << endl;
+        cout << "Warning: omega must be in (0, 2); current value: " << omega << endl;
     }
 }
 
 void SOR::solve() {
-    vector<double> old_ans(n, 0);  // ´æ´¢ÉÏÒ»´Îµü´ú½á¹û
+    vector<double> old_ans(n, 0);  // Store the previous iteration result
     ans.resize(n, 0);
 
     int iter_count = 0;
-    const int max_iterations = 1000;  // ×î´óµü´ú´ÎÊý
+    const int max_iterations = 1000;  // Maximum number of iterations
 
     while (true) {
-        old_ans = ans;  // ±£´æµ±Ç°½á¹û
+        old_ans = ans;  // Save the current iteration result
 
         for (int i = 0; i < n; ++i) {
             double sum = 0.0;
 
-            // Ê¹ÓÃ×îÐÂÖµ¼ÆËã
+            // Use the latest values
             for (int j = 0; j < i; ++j) {
-                sum += m_A[i][j] * ans[j];  // Ê¹ÓÃµ±Ç°µü´úÒÑ¸üÐÂµÄÖµ
+                sum += m_A[i][j] * ans[j];  // Use values updated in the current iteration
             }
             for (int j = i + 1; j < n; ++j) {
-                sum += m_A[i][j] * old_ans[j];  // Ê¹ÓÃÉÏÒ»´Îµü´úµÄÖµ
+                sum += m_A[i][j] * old_ans[j];  // Use values from the previous iteration
             }
 
-            // SOR µü´ú¹«Ê½: x_i^(k+1) = (1-¦Ø)x_i^(k) + ¦Ø(b_i - ¦²)/a_ii
+            // SOR iteration formula
             double gauss_seidel = (m_B[i] - sum) / m_A[i][i];
             ans[i] = (1 - omega) * old_ans[i] + omega * gauss_seidel;
         }
 
-        // ¼ÆËãÁ½´Îµü´ú½á¹ûµÄ×î´ó²îÖµ
+        // Compute the maximum difference between iterations
         double max_diff = 0.0;
         for (int i = 0; i < n; ++i) {
             double diff = abs(ans[i] - old_ans[i]);
@@ -118,15 +118,15 @@ void SOR::solve() {
             }
         }
 
-        // ¼ì²éÊÕÁ²
+        // Check convergence
         if (max_diff < differ) {
-            cout << "SOR ·½·¨ÊÕÁ²ÓÚµÚ " << iter_count + 1 << " ´Îµü´ú" << endl;
+            cout << "SOR converged at iteration " << iter_count + 1 << " iterations" << endl;
             break;
         }
 
-        // ¼ì²é×î´óµü´ú´ÎÊý
+        // Check the maximum iteration count
         if (++iter_count >= max_iterations) {
-            cout << "¾¯¸æ£ºSOR ·½·¨ÔÚ " << max_iterations << " ´Îµü´úÄÚÎ´ÊÕÁ²" << endl;
+            cout << "Warning: SOR did not converge within " << max_iterations << " iterations" << endl;
             break;
         }
     }

@@ -20,10 +20,10 @@ int main() {
     LU_Decomposition ans(A, b);
     ans.solve();
     cout << "----------------------" << endl;
-    cout << "LU·Ö½â·¨" << endl;
+    cout << "LU decomposition" << endl;
     ans.print();
     cout << "----------------------" << endl;
-    cout << "¸ßË¹ÈüµÂ·¨" << endl;
+    cout << "Gauss-Seidel method" << endl;
     Gauss_Seidel solution(A, b, 1e-5);
     solution.solve();
     solution.print();
@@ -38,19 +38,19 @@ int main() {
             return 3.0 * x * x - 2.0 * x - 1;
             };
         cout << "----------------" << endl;
-        cout << "²»¶¯µã·¨" << endl;
+        cout << "Fixed-point iteration" << endl;
         Stationary_Points_Iterate a(f, g);
         a.solve(1);
-        cout << "Å£¶Ù·¨" << endl;
+        cout << "Newton method" << endl;
         Newton c(f, df);
         c.solve(2);
-        cout << "Steffensen¼ÓËÙ·¨" << endl;
+        cout << "Steffensen acceleration" << endl;
         Steffensen b(f, g);
         b.solve(1);
     }
     {
         cout << "-------------------" << endl;
-        cout << "ÇúÏßÄâºÏ²âÊÔ" << endl;
+        cout << "Curve fitting test" << endl;
         vector<double> x{ 1,3,4,6,7 };
         vector<double> y{ -2.1,-0.9,-0.6,0.6,0.9 };
         Ordinary_Method solution(x, y);
@@ -60,7 +60,7 @@ int main() {
     }
     {
         cout << "-------------------" << endl;
-        cout << "ÊýÖµ»ý·ÖRomberg²âÊÔ" << endl;
+        cout << "Romberg integration test" << endl;
         auto f = [](double x) {
             return 4.0 / (1 + x * x);
             };
@@ -70,7 +70,7 @@ int main() {
     }
     {
         cout << "----------------------" << endl;
-        cout << "³£Î¢·Ö·½³ÌÊýÖµ½â·¨²âÊÔ" << endl;
+        cout << "ODE numerical solution test" << endl;
         auto dy = [](double x, double y)->double {
             return x - y + 1;
             };

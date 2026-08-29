@@ -4,13 +4,13 @@
 #include <iomanip>
 #include <stdexcept>
 using namespace std;
-// Ö±½Ó·¨»ùÀà
+// Direct solver base class
 class DirectMethod {
 protected:
-    vector<vector<double>> m_A;  // ÏµÊý¾ØÕó
-    vector<double> m_B;          // ÓÒ¶ËÏòÁ¿
-    vector<double> ans;          // ½âÏòÁ¿
-    int n;                       // ¾ØÕóÎ¬¶È
+    vector<vector<double>> m_A;  // Coefficient matrix
+    vector<double> m_B;          // Right-hand side vector
+    vector<double> ans;          // Solution vector
+    int n;                       // Matrix dimension
 public:
     DirectMethod(const vector<vector<double>>& A, const vector<double>& b)
         : m_A(A), m_B(b), n(static_cast<int>(b.size())) {
@@ -19,7 +19,7 @@ public:
     virtual void solve() = 0;
     virtual ~DirectMethod() {}
     void print() const {
-        cout << "·½³Ì×éµÄ½âÎª£º" << endl;
+        cout << "The solution is:" << endl;
         for (int i = 0; i < n; i++) {
             cout << "x" << i + 1 << " = " << fixed << setprecision(6) << ans[i] << endl;
         }
@@ -29,7 +29,7 @@ public:
     }
 };
 
-// ¸ßË¹ÏûÈ¥·¨
+// Gaussian elimination
 class GaussianElimination : public DirectMethod {
 public:
     GaussianElimination(const vector<vector<double>>& A, const vector<double>& b)
@@ -38,11 +38,11 @@ public:
     void solve() override;
 };
 
-// LU·Ö½â·¨
+// LU decomposition
 class LU_Decomposition : public DirectMethod {
 private:
-    vector<vector<double>> m_L;  // ÏÂÈý½Ç¾ØÕó
-    vector<vector<double>> m_U;  // ÉÏÈý½Ç¾ØÕó
+    vector<vector<double>> m_L;  // Lower triangular matrix
+    vector<vector<double>> m_U;  // Upper triangular matrix
     void doolittleDecompose();
 public:
     LU_Decomposition(const vector<vector<double>>& A, const vector<double>& b)
@@ -53,27 +53,27 @@ public:
     void solve() override;
 };
 
-// ×·¸Ï·¨£¨Èý¶Ô½Ç·½³Ì×é£©
+// Thomas algorithm for tridiagonal systems
 class ChaseMethod : public DirectMethod {
 private:
-    vector<double> m_a;  // ÏÂ¶Ô½ÇÏß
-    vector<double> m_c;  // ÉÏ¶Ô½ÇÏß
-    vector<double> m_p;  // ·Ö½âÖÐ¼ä±äÁ¿
-    vector<double> m_q;  // ·Ö½âÖÐ¼ä±äÁ¿
+    vector<double> m_a;  // Subdiagonal
+    vector<double> m_c;  // Superdiagonal
+    vector<double> m_p;  // Decomposition auxiliary values
+    vector<double> m_q;  // Decomposition auxiliary values
     bool decomposed;
     void decompose();
 public:
-    // ÌØÊâ¹¹Ôìº¯ÊýÓÃÓÚÈý¶Ô½Ç¾ØÕó
+    // Constructor for a tridiagonal matrix
     ChaseMethod(const vector<double>& a, const vector<double>& b,
         const vector<double>& c, const vector<double>& d);
     void solve() override;
 };
 
-// Cholesky·Ö½â·¨
+// Cholesky decomposition
 class CholeskyDecomposition : public DirectMethod {
 private:
-    vector<vector<double>> m_L;   // ÏÂÈý½Ç¾ØÕó
-    vector<vector<double>> m_LT;  // ×ªÖÃ¾ØÕó
+    vector<vector<double>> m_L;   // Lower triangular matrix
+    vector<vector<double>> m_LT;  // Transposed matrix
     void choleskyDecompose();
 public:
     CholeskyDecomposition(const vector<vector<double>>& A, const vector<double>& b)

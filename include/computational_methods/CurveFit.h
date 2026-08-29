@@ -1,78 +1,68 @@
 #pragma once
-#include <vector>
-#include <iostream>
+
 #include <cmath>
+#include <iostream>
 #include <stdexcept>
+#include <string>
+#include <vector>
+
 #include "Direct.h"
 
 using namespace std;
 
-
 using Matrix = vector<vector<double>>;
 using Vector = vector<double>;
 
-inline double power(double x, int m) {
-    return pow(x, m);
-}
+inline double power(double x, int exponent) { return pow(x, exponent); }
+
 inline Vector solveLinearSystem(const Matrix& A, const Vector& b) {
     if (A.empty() || b.empty() || A.size() != b.size()) {
-        throw runtime_error("Çó½âÏßÐÔ·½³Ì×éÊ±¾ØÕó»òÏòÁ¿´óÐ¡²»Æ¥Åä»òÎª¿Õ");
+        throw runtime_error("The matrix and vector must be non-empty and have matching dimensions");
     }
-
     try {
         CholeskyDecomposition solver(A, b);
         solver.solve();
         return solver.getSolution();
-    }
-    catch (const runtime_error& e) {
-        cerr << "¾¯¸æ: Cholesky ·Ö½âÊ§°Ü (" << e.what() << ")£¬³¢ÊÔÊ¹ÓÃ¸ßË¹ÏûÔª·¨Çó½â..." << endl;
+    } catch (const runtime_error&) {
         try {
             GaussianElimination solver(A, b);
             solver.solve();
             return solver.getSolution();
-        }
-        catch (const runtime_error& ge) {
-            throw runtime_error("¸ßË¹ÏûÔª·¨Ò²Ê§°ÜÁË: " + string(ge.what()));
+        } catch (const runtime_error& error) {
+            throw runtime_error(string("Both Cholesky decomposition and Gaussian elimination failed: ") + error.what());
         }
     }
 }
+
 class Data {
 protected:
     vector<double> x;
     vector<double> y;
-    vector<double> factor; 
+    vector<double> factor;
 public:
-    Data(vector<double>& x_val, vector<double>& y_val) :x(x_val), y(y_val) {
-        if (x.size() != y.size() || x.empty()) {
-            throw runtime_error("Êý¾ÝµãµÄ x ºÍ y ¸öÊý²»ÏàµÈ»òÊý¾ÝÎª¿Õ!");
-        }
+    Data(vector<double>& x_val, vector<double>& y_val) : x(x_val), y(y_val) {
+        if (x.size() != y.size() || x.empty()) throw runtime_error("Data points must be non-empty and have matching x/y sizes");
     }
     virtual double evaluate(double z) const;
 };
 
-
-class Ordinary_Method :public Data {
+class Ordinary_Method : public Data {
 private:
-    void calculateFactor(int n);
+    void calculateFactor(int degree);
 public:
-    Ordinary_Method(vector<double>& x_val, vector<double>& y_val) :Data(x_val, y_val) {}
-    void calculate(int n);
+    Ordinary_Method(vector<double>& x_val, vector<double>& y_val) : Data(x_val, y_val) {}
+    void calculate(int degree);
     const vector<double>& getFactor() const { return factor; }
 };
-
 
 class Orthogonal_Method : public Data {
 private:
     Vector alpha;
     Vector beta;
-    void calculateCoefficients(int n);
-
+    void calculateCoefficients(int degree);
 public:
-    Orthogonal_Method(vector<double>& x_val, vector<double>& y_val) :Data(x_val, y_val) {}
-
-    void calculate(int n);
-
+    Orthogonal_Method(vector<double>& x_val, vector<double>& y_val) : Data(x_val, y_val) {}
+    void calculate(int degree);
     double evaluate(double z) const override;
-
     const vector<double>& getFactor() const { return factor; }
 };

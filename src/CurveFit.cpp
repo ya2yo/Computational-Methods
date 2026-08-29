@@ -1,176 +1,78 @@
 #include "CurveFit.h"
-double Data::evaluate(double z) const {
-    if (factor.empty()) {
-        throw runtime_error("ÉÐÎ´¼ÆËãÄâºÏÏµÊý (factor)!");
-    }
-    double result = 0.0;
 
-    for (size_t i = 0; i < factor.size(); ++i) {
-        result += factor[i] * power(z, i);
-    }
+double Data::evaluate(double z) const {
+    if (factor.empty()) throw runtime_error("Fit coefficients have not been computed");
+    double result = 0.0;
+    for (size_t i = 0; i < factor.size(); ++i) result += factor[i] * power(z, static_cast<int>(i));
     return result;
 }
 
-void Ordinary_Method::calculateFactor(int n) {
+void Ordinary_Method::calculateFactor(int degree) {
     factor.clear();
-
-    if (n < 0 || static_cast<std::size_t>(n) >= x.size()) {
-        throw runtime_error("¶àÏîÊ½´ÎÊý n ²»ºÏÀí (Ó¦ÔÚ 0 µ½ Êý¾Ýµã¸öÊý-1 Ö®¼ä)");
+    if (degree < 0 || static_cast<size_t>(degree) >= x.size()) {
+        throw runtime_error("Polynomial degree must be between 0 and the number of data points minus one");
     }
-
-    Matrix A(n + 1, Vector(n + 1, 0.0));
-    Vector b(n + 1, 0.0);
-    int m = x.size(); 
-
-
-    for (int i = 0; i <= n; ++i) {
-        for (int j = i; j <= n; ++j) { 
-            double sum_pow = 0.0;
-            for (int k = 0; k < m; ++k) {
-                sum_pow += power(x[k], i + j);
-            }
-            A[i][j] = sum_pow;
-            if (i != j) {
-                A[j][i] = sum_pow; 
-            }
+    Matrix A(degree + 1, Vector(degree + 1, 0.0));
+    Vector b(degree + 1, 0.0);
+    int count = static_cast<int>(x.size());
+    for (int i = 0; i <= degree; ++i) {
+        for (int j = i; j <= degree; ++j) {
+            double sum = 0.0;
+            for (int k = 0; k < count; ++k) sum += power(x[k], i + j);
+            A[i][j] = A[j][i] = sum;
         }
-
-        for (int k = 0; k < m; ++k) {
-            b[i] += y[k] * power(x[k], i);
-        }
+        for (int k = 0; k < count; ++k) b[i] += y[k] * power(x[k], i);
     }
-
-
     factor = solveLinearSystem(A, b);
 }
 
-void Ordinary_Method::calculate(int n)
-{
-    calculateFactor(n);
-}
+void Ordinary_Method::calculate(int degree) { calculateFactor(degree); }
 
-void Orthogonal_Method::calculateCoefficients(int n) {
-    factor.clear();
-    alpha.clear();
-    beta.clear();
-
-    if (n < 0 || static_cast<std::size_t>(n) >= x.size()) {
-        throw runtime_error("¶àÏîÊ½´ÎÊý n ²»ºÏÀí (Ó¦ÔÚ 0 µ½ Êý¾Ýµã¸öÊý-1 Ö®¼ä)");
+void Orthogonal_Method::calculateCoefficients(int degree) {
+    factor.clear(); alpha.clear(); beta.clear();
+    if (degree < 0 || static_cast<size_t>(degree) >= x.size()) {
+        throw runtime_error("Polynomial degree must be between 0 and the number of data points minus one");
     }
-
-    int m = x.size(); 
-
-    factor.resize(n + 1);
-    alpha.resize(n + 1, 0.0); 
-    beta.resize(n + 1, 0.0); 
-
-
-    Vector phi_curr(m);
-    Vector phi_prev(m, 0.0); 
-    Vector phi_pprev(m, 0.0);
-
-    double sum_y_phi = 0.0;
-    double sum_phi_curr_sq = 0.0;
-    double sum_x_phi_sq = 0.0;
-
-    double sum_phi_prev_sq = 0.0; 
-    double sum_phi_pprev_sq = 0.0; 
-
-    sum_y_phi = 0.0;
-    sum_x_phi_sq = 0.0;
-    sum_phi_curr_sq = (double)m;
-
-    for (int k = 0; k < m; ++k) {
-        phi_curr[k] = 1.0;
-        sum_y_phi += y[k];     
-        sum_x_phi_sq += x[k];  
-    }
-
-
-    factor[0] = sum_y_phi / sum_phi_curr_sq;
-
-    alpha[0] = sum_x_phi_sq / sum_phi_curr_sq;
-
-
-    phi_prev = phi_curr;
-    sum_phi_prev_sq = sum_phi_curr_sq;
-
-    for (int i = 1; i <= n; ++i) {
-
-
+    int count = static_cast<int>(x.size());
+    factor.resize(degree + 1); alpha.resize(degree + 1, 0.0); beta.resize(degree + 1, 0.0);
+    Vector current(count), previous(count, 0.0), previous_previous(count, 0.0);
+    double sum_y_phi = 0.0, sum_phi_sq = static_cast<double>(count), sum_x_phi_sq = 0.0;
+    for (int k = 0; k < count; ++k) { current[k] = 1.0; sum_y_phi += y[k]; sum_x_phi_sq += x[k]; }
+    factor[0] = sum_y_phi / sum_phi_sq;
+    alpha[0] = sum_x_phi_sq / sum_phi_sq;
+    previous = current;
+    double previous_sq = sum_phi_sq, previous_previous_sq = 0.0;
+    for (int i = 1; i <= degree; ++i) {
         if (i >= 2) {
-            if (sum_phi_pprev_sq < 1e-12) {
-                throw runtime_error("Õý½»¶àÏîÊ½ÄâºÏÖÐ Psi_{i-2} Æ½·½ºÍ½Ó½üÁã£¬ÎÞ·¨¼ÆËã beta¡£");
-            }
-            beta[i - 1] = sum_phi_prev_sq / sum_phi_pprev_sq;
+            if (previous_previous_sq < 1e-12) throw runtime_error("Orthogonal basis norm is too small");
+            beta[i - 1] = previous_sq / previous_previous_sq;
         }
-
-        sum_phi_curr_sq = 0.0;
-        sum_y_phi = 0.0;
-        sum_x_phi_sq = 0.0;
-
-        for (int k = 0; k < m; ++k) {
-            double current_beta = (i == 1) ? 0.0 : beta[i - 1];
-
-            // µÝÍÆ¼ÆËã
-            phi_curr[k] = (x[k] - alpha[i - 1]) * phi_prev[k] - current_beta * phi_pprev[k];
-
-            // ¼ÆËãÐÂµÄºÍ
-            sum_phi_curr_sq += phi_curr[k] * phi_curr[k];
-            sum_y_phi += y[k] * phi_curr[k];
-            sum_x_phi_sq += x[k] * phi_curr[k] * phi_curr[k];
+        sum_phi_sq = sum_y_phi = sum_x_phi_sq = 0.0;
+        for (int k = 0; k < count; ++k) {
+            double current_beta = i == 1 ? 0.0 : beta[i - 1];
+            current[k] = (x[k] - alpha[i - 1]) * previous[k] - current_beta * previous_previous[k];
+            sum_phi_sq += current[k] * current[k]; sum_y_phi += y[k] * current[k];
+            sum_x_phi_sq += x[k] * current[k] * current[k];
         }
-
-        // ¼ì²é·ÖÄ¸
-        if (sum_phi_curr_sq < 1e-12) {
-            throw runtime_error("Õý½»¶àÏîÊ½ÄâºÏÖÐ Sum [Psi_i]^2 ½Ó½üÁã£¬ÄâºÏÖÕÖ¹¡£");
-        }
-
-        // 3. ¼ÆËã c_i
-        factor[i] = sum_y_phi / sum_phi_curr_sq;
-
-        // 4. ¼ÆËã alpha_i (Èç¹ûÐèÒªÏÂÒ»ÂÖµÝÍÆ)
-        if (i < n) {
-            alpha[i] = sum_x_phi_sq / sum_phi_curr_sq;
-        }
-
-
-        phi_pprev = phi_prev;
-        phi_prev = phi_curr; 
-
-        sum_phi_pprev_sq = sum_phi_prev_sq; 
-        sum_phi_prev_sq = sum_phi_curr_sq;
+        if (sum_phi_sq < 1e-12) throw runtime_error("Orthogonal basis norm is too small");
+        factor[i] = sum_y_phi / sum_phi_sq;
+        if (i < degree) alpha[i] = sum_x_phi_sq / sum_phi_sq;
+        previous_previous = previous; previous = current;
+        previous_previous_sq = previous_sq; previous_sq = sum_phi_sq;
     }
 }
 
-void Orthogonal_Method::calculate(int n) {
-    calculateCoefficients(n);
-}
-
+void Orthogonal_Method::calculate(int degree) { calculateCoefficients(degree); }
 
 double Orthogonal_Method::evaluate(double z) const {
-    if (factor.empty()) {
-        throw runtime_error("ÉÐÎ´¼ÆËãÄâºÏÏµÊý (factor)!");
+    if (factor.empty()) throw runtime_error("Fit coefficients have not been computed");
+    int degree = static_cast<int>(factor.size()) - 1;
+    double previous_previous = 0.0, previous = 1.0, current = 0.0;
+    double result = factor[0] * previous;
+    for (int i = 1; i <= degree; ++i) {
+        double current_beta = i == 1 ? 0.0 : beta[i - 1];
+        current = (z - alpha[i - 1]) * previous - current_beta * previous_previous;
+        result += factor[i] * current; previous_previous = previous; previous = current;
     }
-
-    int n = factor.size() - 1;
-
-    double Psi_pprev = 0.0;
-    double Psi_prev = 1.0;  
-    double Psi_curr = 0.0;
-
-    double result = factor[0] * Psi_prev; 
-
-    for (int i = 1; i <= n; ++i) {
-        double current_beta = (i == 1) ? 0.0 : beta[i - 1];
-
-        Psi_curr = (z - alpha[i - 1]) * Psi_prev - current_beta * Psi_pprev;
-
-        result += factor[i] * Psi_curr;
-
-        Psi_pprev = Psi_prev;
-        Psi_prev = Psi_curr;
-    }
-
     return result;
 }

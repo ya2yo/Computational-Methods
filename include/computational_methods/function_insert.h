@@ -15,7 +15,7 @@ public:
     FunctionInsert(const vector<double>& x_nodes, const vector<double>& y_nodes)
         : x(x_nodes), y(y_nodes), n(x_nodes.size()) {
         if (x.size() != y.size() || x.empty()) {
-            throw invalid_argument("²åÖµ½ÚµãÊýÁ¿²»Æ¥Åä»òÎª¿Õ");
+            throw invalid_argument("Interpolation nodes and values must be non-empty and have matching sizes");
         }
     }
 
@@ -26,7 +26,7 @@ public:
 
 
     void printNodes() const {
-        cout << "²åÖµ½Úµã£º" << endl;
+        cout << "Interpolation nodes: " << endl;
         for (int i = 0; i < n; i++) {
             cout << "(" << x[i] << ", " << y[i] << ") ";
         }
@@ -34,7 +34,7 @@ public:
     }
 };
 
-// --- À­¸ñÀÊÈÕ²åÖµ ---
+// --- Lagrange interpolation ---
 class LagrangeInterpolation : public FunctionInsert {
 public:
     LagrangeInterpolation(const vector<double>& x_nodes, const vector<double>& y_nodes)
@@ -74,7 +74,7 @@ public:
     HermiteInterpolation(const vector<double>& x_nodes, const vector<double>& y_nodes, const vector<double>& y_prime_nodes)
         : FunctionInsert(x_nodes, y_nodes), y_prime(y_prime_nodes) {
         if (x.size() != y_prime.size()) {
-            throw invalid_argument("ºÕÃ×ÌØ²åÖµÒªÇó½Úµã¡¢º¯ÊýÖµºÍµ¼ÊýÖµÊýÁ¿Ò»ÖÂ");
+            throw invalid_argument("Hermite interpolation requires matching node, value, and derivative counts");
         }
         computeHermiteCoeffs();
     }
@@ -83,7 +83,7 @@ public:
     double interpolate(double val) override;
 };
 
-//Èý´ÎÑùÌõº¯Êý²åÖµ (²ÉÓÃ±ß½çÌõ¼þ M0=Mn=0)
+// Cubic spline interpolation with natural boundary conditions
 class CubicSplineInterpolation : public FunctionInsert {
 private:
     vector<double> M; 
@@ -95,7 +95,7 @@ public:
         : FunctionInsert(x_nodes, y_nodes) {
         M.resize(n, 0.0);
         if (n < 3) {
-            throw invalid_argument("Èý´ÎÑùÌõ²åÖµÖÁÉÙÐèÒª3¸ö½Úµã");
+            throw invalid_argument("Cubic spline interpolation requires at least three nodes");
         }
         solveTridiagonalSystem(); 
     }

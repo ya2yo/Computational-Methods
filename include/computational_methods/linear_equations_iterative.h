@@ -1,47 +1,43 @@
 #pragma once
-#include <vector>
-#include <iostream>
-#include <ranges> 
+
 #include <algorithm>
+#include <iostream>
+#include <vector>
+
 using namespace std;
-//ÏßÐÔ·½³Ì×éµÄµü´ú·¨
-//Jacobi
-//Gauss
-//SOR
+
+// Iterative methods for linear systems.
 class iterative_method {
 protected:
-	vector<vector<double>> m_A;//µü´ú¾ØÕó
-	vector<double> m_B;
-	vector<double> ans;
-	int n;
-	double differ;//µü´ú´ÎÊý
+    vector<vector<double>> m_A;
+    vector<double> m_B;
+    vector<double> ans;
+    int n;
+    double differ;
 public:
-	//¹¹Ôìº¯Êý
-	iterative_method(const vector<vector<double>>& A, const vector<double>& b, double);
-	//Çó½âº¯Êý
-	virtual void solve()=0;
-	//´òÓ¡Êä³ö½á¹û
-	void print() const;
-	virtual ~iterative_method() {};
-};
-class Jacobi :public iterative_method {
-public:
-	//¹¹Ôìº¯Êý
-	Jacobi(const vector<vector<double>>& A, const vector<double>& b, double);
-	void solve() override;
-};
-class Gauss_Seidel :public iterative_method {
-public:
-	Gauss_Seidel(const vector<vector<double>>& A, const vector<double>& b, double);
-	void solve() override;
+    iterative_method(const vector<vector<double>>& A, const vector<double>& b, double tolerance);
+    virtual void solve() = 0;
+    void print() const;
+    virtual ~iterative_method() {}
 };
 
-//³¬ËÉ³Úµü´ú
+class Jacobi : public iterative_method {
+public:
+    Jacobi(const vector<vector<double>>& A, const vector<double>& b, double tolerance);
+    void solve() override;
+};
+
+class Gauss_Seidel : public iterative_method {
+public:
+    Gauss_Seidel(const vector<vector<double>>& A, const vector<double>& b, double tolerance);
+    void solve() override;
+};
+
+// Successive over-relaxation iteration.
 class SOR : public iterative_method {
 private:
-	double omega;  // ËÉ³ÚÒò×Ó
+    double omega;
 public:
-	// ¹¹Ôìº¯Êý
-	SOR(const vector<vector<double>>& A, const vector<double>& b, double diff, double w);
-	void solve() override;
+    SOR(const vector<vector<double>>& A, const vector<double>& b, double tolerance, double relaxation);
+    void solve() override;
 };
