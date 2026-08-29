@@ -2,7 +2,7 @@
 
 
 
-// 计算拉格朗日基函数 L_k(x)
+// 录脝脣茫脌颅赂帽脌脢脠脮禄霉潞炉脢媒 L_k(x)
 double lagrangeBasis(int k, double val, const vector<double>& x_nodes) {
     double result = 1.0;
     for (int i = 0; i < x_nodes.size(); i++) {
@@ -157,7 +157,7 @@ void CubicSplineInterpolation::solveTridiagonalSystem() {
     for (int i = 1; i < dim; i++) {
         double denom = b[i] - a[i] * P[i - 1];
         if (abs(denom) < 1e-10) {
-            throw runtime_error("三次样条插值矩阵奇异，无法求解");
+            throw runtime_error("脠媒麓脦脩霉脤玫虏氓脰碌戮脴脮贸脝忙脪矛拢卢脦脼路篓脟贸陆芒");
         }
         if (i < dim - 1) {
             P[i] = c[i] / denom;
@@ -181,7 +181,7 @@ void CubicSplineInterpolation::solveTridiagonalSystem() {
 
 int CubicSplineInterpolation::findInterval(double val) {
     if (val < x[0] || val > x[n - 1]) {
-        throw out_of_range("插值点超出给定节点范围");
+        throw out_of_range("虏氓脰碌碌茫鲁卢鲁枚赂酶露篓陆脷碌茫路露脦搂");
     }
 
     for (int i = 0; i < n - 1; i++) {
@@ -200,13 +200,12 @@ double CubicSplineInterpolation::interpolate(double val) {
         else if (n == 1) {
             return y[0];
         }
-        throw invalid_argument("节点数量不足");
+        throw invalid_argument("陆脷碌茫脢媒脕驴虏禄脳茫");
     }
     int i = findInterval(val);
     int i_plus_1 = i + 1;
 
     double h_i = x[i_plus_1] - x[i];
-    double t = val - x[i];
     double u = (x[i_plus_1] - val) / h_i;
     double v = (val - x[i]) / h_i;
 

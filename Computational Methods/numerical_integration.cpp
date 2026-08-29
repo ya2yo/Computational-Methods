@@ -1,7 +1,7 @@
 #include "numerical_integration.h"
 #include <algorithm>
 
-//计算梯形公式
+//录脝脣茫脤脻脨脦鹿芦脢陆
 double Romberg::trapezoid(int k) {
     double range = sup - inf;
     int n = 1 << k;
@@ -20,9 +20,9 @@ double Romberg::trapezoid(int k) {
     }
 }
 
-// 打印 Romberg 表格
+// 麓貌脫隆 Romberg 卤铆赂帽
 void Romberg::printTable() const {
-    cout << "\n--- Romberg 积分表 ---" << endl;
+    cout << "\n--- Romberg 禄媒路脰卤铆 ---" << endl;
     for (int j = 0; j <= printn; j++) {
         cout << "R[" << j << "]: ";
         for (int i = 0; i <= j; i++) {
@@ -32,7 +32,7 @@ void Romberg::printTable() const {
     }
     cout << "----------------------\n" << endl;
 }
-// 执行 Romberg 积分
+// 脰麓脨脨 Romberg 禄媒路脰
 double Romberg::solve(int max_k, double tolerance) {
     if (sup == inf) return 0.0;
     R.resize(max_k, vector<double>(max_k, 0.0));

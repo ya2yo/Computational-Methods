@@ -4,13 +4,13 @@
 #include <iomanip>
 #include <stdexcept>
 using namespace std;
-// 直接法基类
+// 脰卤陆脫路篓禄霉脌脿
 class DirectMethod {
 protected:
-    vector<vector<double>> m_A;  // 系数矩阵
-    vector<double> m_B;          // 右端向量
-    vector<double> ans;          // 解向量
-    int n;                       // 矩阵维度
+    vector<vector<double>> m_A;  // 脧碌脢媒戮脴脮贸
+    vector<double> m_B;          // 脫脪露脣脧貌脕驴
+    vector<double> ans;          // 陆芒脧貌脕驴
+    int n;                       // 戮脴脮贸脦卢露脠
 public:
     DirectMethod(const vector<vector<double>>& A, const vector<double>& b)
         : m_A(A), m_B(b), n(b.size()) {
@@ -19,7 +19,7 @@ public:
     virtual void solve() = 0;
     virtual ~DirectMethod() {}
     void print() const {
-        cout << "方程组的解为：" << endl;
+        cout << "路陆鲁脤脳茅碌脛陆芒脦陋拢潞" << endl;
         for (int i = 0; i < n; i++) {
             cout << "x" << i + 1 << " = " << fixed << setprecision(6) << ans[i] << endl;
         }
@@ -29,7 +29,7 @@ public:
     }
 };
 
-// 高斯消去法
+// 赂脽脣鹿脧没脠楼路篓
 class GaussianElimination : public DirectMethod {
 public:
     GaussianElimination(const vector<vector<double>>& A, const vector<double>& b)
@@ -38,11 +38,11 @@ public:
     void solve() override;
 };
 
-// LU分解法
+// LU路脰陆芒路篓
 class LU_Decomposition : public DirectMethod {
 private:
-    vector<vector<double>> m_L;  // 下三角矩阵
-    vector<vector<double>> m_U;  // 上三角矩阵
+    vector<vector<double>> m_L;  // 脧脗脠媒陆脟戮脴脮贸
+    vector<vector<double>> m_U;  // 脡脧脠媒陆脟戮脴脮贸
     void doolittleDecompose();
 public:
     LU_Decomposition(const vector<vector<double>>& A, const vector<double>& b)
@@ -53,27 +53,27 @@ public:
     void solve() override;
 };
 
-// 追赶法（三对角方程组）
+// 脳路赂脧路篓拢篓脠媒露脭陆脟路陆鲁脤脳茅拢漏
 class ChaseMethod : public DirectMethod {
 private:
-    vector<double> m_a;  // 下对角线
-    vector<double> m_c;  // 上对角线
-    vector<double> m_p;  // 分解中间变量
-    vector<double> m_q;  // 分解中间变量
+    vector<double> m_a;  // 脧脗露脭陆脟脧脽
+    vector<double> m_c;  // 脡脧露脭陆脟脧脽
+    vector<double> m_p;  // 路脰陆芒脰脨录盲卤盲脕驴
+    vector<double> m_q;  // 路脰陆芒脰脨录盲卤盲脕驴
     bool decomposed;
     void decompose();
 public:
-    // 特殊构造函数用于三对角矩阵
+    // 脤脴脢芒鹿鹿脭矛潞炉脢媒脫脙脫脷脠媒露脭陆脟戮脴脮贸
     ChaseMethod(const vector<double>& a, const vector<double>& b,
         const vector<double>& c, const vector<double>& d);
     void solve() override;
 };
 
-// Cholesky分解法
+// Cholesky路脰陆芒路篓
 class CholeskyDecomposition : public DirectMethod {
 private:
-    vector<vector<double>> m_L;   // 下三角矩阵
-    vector<vector<double>> m_LT;  // 转置矩阵
+    vector<vector<double>> m_L;   // 脧脗脠媒陆脟戮脴脮贸
+    vector<vector<double>> m_LT;  // 脳陋脰脙戮脴脮贸
     void choleskyDecompose();
 public:
     CholeskyDecomposition(const vector<vector<double>>& A, const vector<double>& b)

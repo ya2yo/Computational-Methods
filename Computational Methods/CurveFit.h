@@ -16,7 +16,7 @@ inline double power(double x, int m) {
 }
 inline Vector solveLinearSystem(const Matrix& A, const Vector& b) {
     if (A.empty() || b.empty() || A.size() != b.size()) {
-        throw runtime_error("求解线性方程组时矩阵或向量大小不匹配或为空");
+        throw runtime_error("脟贸陆芒脧脽脨脭路陆鲁脤脳茅脢卤戮脴脮贸禄貌脧貌脕驴麓贸脨隆虏禄脝楼脜盲禄貌脦陋驴脮");
     }
 
     try {
@@ -25,14 +25,14 @@ inline Vector solveLinearSystem(const Matrix& A, const Vector& b) {
         return solver.getSolution();
     }
     catch (const runtime_error& e) {
-        cerr << "警告: Cholesky 分解失败 (" << e.what() << ")，尝试使用高斯消元法求解..." << endl;
+        cerr << "戮炉赂忙: Cholesky 路脰陆芒脢搂掳脺 (" << e.what() << ")拢卢鲁垄脢脭脢鹿脫脙赂脽脣鹿脧没脭陋路篓脟贸陆芒..." << endl;
         try {
             GaussianElimination solver(A, b);
             solver.solve();
             return solver.getSolution();
         }
         catch (const runtime_error& ge) {
-            throw runtime_error("高斯消元法也失败了: " + string(ge.what()));
+            throw runtime_error("赂脽脣鹿脧没脭陋路篓脪虏脢搂掳脺脕脣: " + string(ge.what()));
         }
     }
 }
@@ -44,7 +44,7 @@ protected:
 public:
     Data(vector<double>& x_val, vector<double>& y_val) :x(x_val), y(y_val) {
         if (x.size() != y.size() || x.empty()) {
-            throw runtime_error("数据点的 x 和 y 个数不相等或数据为空!");
+            throw runtime_error("脢媒戮脻碌茫碌脛 x 潞脥 y 赂枚脢媒虏禄脧脿碌脠禄貌脢媒戮脻脦陋驴脮!");
         }
     }
     virtual double evaluate(double z) const;

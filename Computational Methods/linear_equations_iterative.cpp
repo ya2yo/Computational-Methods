@@ -10,11 +10,11 @@ void iterative_method::print() const {
 Jacobi::Jacobi(const vector<vector<double>>& A, const vector<double>& b, double diff):iterative_method(A,b,diff){}
 void Jacobi::solve() {
     ans.resize(n, 0);
-    vector<double> prev_ans(n, 0);  // 存储上一次迭代结果
+    vector<double> prev_ans(n, 0);  // 麓忙麓垄脡脧脪禄麓脦碌眉麓煤陆谩鹿没
     const int max_iterations = 1000;
     for (int iter = 0; iter < max_iterations; ++iter) {
-        vector<double> new_ans(n, 0);  // 存储当前迭代结果
-        // Jacobi 迭代
+        vector<double> new_ans(n, 0);  // 麓忙麓垄碌卤脟掳碌眉麓煤陆谩鹿没
+        // Jacobi 碌眉麓煤
         for (int i = 0; i < n; ++i) {
             double sum = 0.0;
             for (int j = 0; j < n; ++j) {
@@ -24,7 +24,7 @@ void Jacobi::solve() {
             }
             new_ans[i] = (m_B[i] - sum) / m_A[i][i];
         }
-        // 计算两次迭代结果的最大差值
+        // 录脝脣茫脕陆麓脦碌眉麓煤陆谩鹿没碌脛脳卯麓贸虏卯脰碌
         double max_diff = 0.0;
         for (int i = 0; i < n; ++i) {
             double diff = abs(new_ans[i] - prev_ans[i]);
@@ -32,26 +32,26 @@ void Jacobi::solve() {
                 max_diff = diff;
             }
         }
-        ans = new_ans;  // 更新最终结果
-        prev_ans = new_ans;  // 为下一次迭代准备
-        // 收敛判断
+        ans = new_ans;  // 赂眉脨脗脳卯脰脮陆谩鹿没
+        prev_ans = new_ans;  // 脦陋脧脗脪禄麓脦碌眉麓煤脳录卤赂
+        // 脢脮脕虏脜脨露脧
         if (max_diff < differ) {
-            cout << "Jacobi 方法收敛于第 " << iter + 1 << " 次迭代" << endl;
+            cout << "Jacobi 路陆路篓脢脮脕虏脫脷碌脷 " << iter + 1 << " 麓脦碌眉麓煤" << endl;
             return;
         }
     }
-    cout << "警告：Jacobi 方法未在 " << max_iterations << " 次迭代内收敛" << endl;
+    cout << "戮炉赂忙拢潞Jacobi 路陆路篓脦麓脭脷 " << max_iterations << " 麓脦碌眉麓煤脛脷脢脮脕虏" << endl;
 }
 
 Gauss_Seidel::Gauss_Seidel(const vector<vector<double>>& A, const vector<double>& b, double diff) :iterative_method(A, b, diff) {};
 void Gauss_Seidel::solve() {
     ans.resize(n, 0);
     vector<double> prev_ans(n, 0);
-    int max_iterations = 1000;  // 最大迭代次数
+    int max_iterations = 1000;  // 脳卯麓贸碌眉麓煤麓脦脢媒
 
     for (int iter = 0; iter < max_iterations; ++iter) {
-        prev_ans = ans;  // 保存上一次迭代结果
-        // Gauss-Seidel 迭代
+        prev_ans = ans;  // 卤拢麓忙脡脧脪禄麓脦碌眉麓煤陆谩鹿没
+        // Gauss-Seidel 碌眉麓煤
         for (int i = 0; i < n; ++i) {
             double sum = m_B[i];
             for (int j = 0; j < n; ++j) {
@@ -61,54 +61,54 @@ void Gauss_Seidel::solve() {
             }
             ans[i] = sum / m_A[i][i];
         }
-        // 检查收敛
+        // 录矛虏茅脢脮脕虏
         double max_error = 0.0;
         for (int i = 0; i < n; ++i) {
             max_error = std::max(max_error, std::abs(ans[i] - prev_ans[i]));
         }
         if (max_error < differ) {
-            cout << "Gauss-Seidel 收敛于第 " << iter + 1 << " 次迭代" << endl;
+            cout << "Gauss-Seidel 脢脮脕虏脫脷碌脷 " << iter + 1 << " 麓脦碌眉麓煤" << endl;
             return;
         }
     }
-    cout << "警告：未在最大迭代次数内收敛" << endl;
+    cout << "戮炉赂忙拢潞脦麓脭脷脳卯麓贸碌眉麓煤麓脦脢媒脛脷脢脮脕虏" << endl;
 }
 
 SOR::SOR(const vector<vector<double>>& A, const vector<double>& b, double diff, double w)
     : iterative_method(A, b, diff), omega(w) {
-    // 检查松弛因子是否合理
+    // 录矛虏茅脣脡鲁脷脪貌脳脫脢脟路帽潞脧脌铆
     if (omega <= 0 || omega >= 2) {
-        cout << "警告：松弛因子 omega 应在 (0,2) 范围内，当前值: " << omega << endl;
+        cout << "戮炉赂忙拢潞脣脡鲁脷脪貌脳脫 omega 脫娄脭脷 (0,2) 路露脦搂脛脷拢卢碌卤脟掳脰碌: " << omega << endl;
     }
 }
 
 void SOR::solve() {
-    vector<double> old_ans(n, 0);  // 存储上一次迭代结果
+    vector<double> old_ans(n, 0);  // 麓忙麓垄脡脧脪禄麓脦碌眉麓煤陆谩鹿没
     ans.resize(n, 0);
 
     int iter_count = 0;
-    const int max_iterations = 1000;  // 最大迭代次数
+    const int max_iterations = 1000;  // 脳卯麓贸碌眉麓煤麓脦脢媒
 
     while (true) {
-        old_ans = ans;  // 保存当前结果
+        old_ans = ans;  // 卤拢麓忙碌卤脟掳陆谩鹿没
 
         for (int i = 0; i < n; ++i) {
             double sum = 0.0;
 
-            // 使用最新值计算
+            // 脢鹿脫脙脳卯脨脗脰碌录脝脣茫
             for (int j = 0; j < i; ++j) {
-                sum += m_A[i][j] * ans[j];  // 使用当前迭代已更新的值
+                sum += m_A[i][j] * ans[j];  // 脢鹿脫脙碌卤脟掳碌眉麓煤脪脩赂眉脨脗碌脛脰碌
             }
             for (int j = i + 1; j < n; ++j) {
-                sum += m_A[i][j] * old_ans[j];  // 使用上一次迭代的值
+                sum += m_A[i][j] * old_ans[j];  // 脢鹿脫脙脡脧脪禄麓脦碌眉麓煤碌脛脰碌
             }
 
-            // SOR 迭代公式: x_i^(k+1) = (1-ω)x_i^(k) + ω(b_i - Σ)/a_ii
+            // SOR 碌眉麓煤鹿芦脢陆: x_i^(k+1) = (1-娄脴)x_i^(k) + 娄脴(b_i - 娄虏)/a_ii
             double gauss_seidel = (m_B[i] - sum) / m_A[i][i];
             ans[i] = (1 - omega) * old_ans[i] + omega * gauss_seidel;
         }
 
-        // 计算两次迭代结果的最大差值
+        // 录脝脣茫脕陆麓脦碌眉麓煤陆谩鹿没碌脛脳卯麓贸虏卯脰碌
         double max_diff = 0.0;
         for (int i = 0; i < n; ++i) {
             double diff = abs(ans[i] - old_ans[i]);
@@ -117,15 +117,15 @@ void SOR::solve() {
             }
         }
 
-        // 检查收敛
+        // 录矛虏茅脢脮脕虏
         if (max_diff < differ) {
-            cout << "SOR 方法收敛于第 " << iter_count + 1 << " 次迭代" << endl;
+            cout << "SOR 路陆路篓脢脮脕虏脫脷碌脷 " << iter_count + 1 << " 麓脦碌眉麓煤" << endl;
             break;
         }
 
-        // 检查最大迭代次数
+        // 录矛虏茅脳卯麓贸碌眉麓煤麓脦脢媒
         if (++iter_count >= max_iterations) {
-            cout << "警告：SOR 方法在 " << max_iterations << " 次迭代内未收敛" << endl;
+            cout << "戮炉赂忙拢潞SOR 路陆路篓脭脷 " << max_iterations << " 麓脦碌眉麓煤脛脷脦麓脢脮脕虏" << endl;
             break;
         }
     }

@@ -4,29 +4,29 @@
 #include <ranges> 
 #include <algorithm>
 using namespace std;
-//线性方程组的迭代法
+//脧脽脨脭路陆鲁脤脳茅碌脛碌眉麓煤路篓
 //Jacobi
 //Gauss
 //SOR
 class iterative_method {
 protected:
-	vector<vector<double>> m_A;//迭代矩阵
+	vector<vector<double>> m_A;//碌眉麓煤戮脴脮贸
 	vector<double> m_B;
 	vector<double> ans;
-	double differ;//迭代次数
+	double differ;//碌眉麓煤麓脦脢媒
 	unsigned n;
 public:
-	//构造函数
+	//鹿鹿脭矛潞炉脢媒
 	iterative_method(const vector<vector<double>>& A, const vector<double>& b, double);
-	//求解函数
+	//脟贸陆芒潞炉脢媒
 	virtual void solve()=0;
-	//打印输出结果
+	//麓貌脫隆脢盲鲁枚陆谩鹿没
 	void print() const;
 	virtual ~iterative_method() {};
 };
 class Jacobi :public iterative_method {
 public:
-	//构造函数
+	//鹿鹿脭矛潞炉脢媒
 	Jacobi(const vector<vector<double>>& A, const vector<double>& b, double);
 	void solve() override;
 };
@@ -36,12 +36,12 @@ public:
 	void solve() override;
 };
 
-//超松弛迭代
+//鲁卢脣脡鲁脷碌眉麓煤
 class SOR : public iterative_method {
 private:
-	double omega;  // 松弛因子
+	double omega;  // 脣脡鲁脷脪貌脳脫
 public:
-	// 构造函数
+	// 鹿鹿脭矛潞炉脢媒
 	SOR(const vector<vector<double>>& A, const vector<double>& b, double diff, double w);
 	void solve() override;
 };

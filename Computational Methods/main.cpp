@@ -20,10 +20,10 @@ int main() {
     LU_Decomposition ans(A, b);
     ans.solve();
     cout << "----------------------" << endl;
-    cout << "LU分解法" << endl;
+    cout << "LU路脰陆芒路篓" << endl;
     ans.print();
     cout << "----------------------" << endl;
-    cout << "高斯赛德法" << endl;
+    cout << "赂脽脣鹿脠眉碌脗路篓" << endl;
     Gauss_Seidel solution(A, b, 1e-5);
     solution.solve();
     solution.print();
@@ -38,19 +38,19 @@ int main() {
             return 3.0 * x * x - 2.0 * x - 1;
             };
         cout << "----------------" << endl;
-        cout << "不动点法" << endl;
+        cout << "虏禄露炉碌茫路篓" << endl;
         Stationary_Points_Iterate a(f, g);
         a.solve(1);
-        cout << "牛顿法" << endl;
+        cout << "脜拢露脵路篓" << endl;
         Newton c(f, df);
         c.solve(2);
-        cout << "Steffensen加速法" << endl;
+        cout << "Steffensen录脫脣脵路篓" << endl;
         Steffensen b(f, g);
         b.solve(1);
     }
     {
         cout << "-------------------" << endl;
-        cout << "曲线拟合测试" << endl;
+        cout << "脟煤脧脽脛芒潞脧虏芒脢脭" << endl;
         vector<double> x{ 1,3,4,6,7 };
         vector<double> y{ -2.1,-0.9,-0.6,0.6,0.9 };
         Ordinary_Method solution(x, y);
@@ -60,7 +60,7 @@ int main() {
     }
     {
         cout << "-------------------" << endl;
-        cout << "数值积分Romberg测试" << endl;
+        cout << "脢媒脰碌禄媒路脰Romberg虏芒脢脭" << endl;
         auto f = [](double x) {
             return 4.0 / (1 + x * x);
             };
@@ -70,7 +70,7 @@ int main() {
     }
     {
         cout << "----------------------" << endl;
-        cout << "常微分方程数值解法测试" << endl;
+        cout << "鲁拢脦垄路脰路陆鲁脤脢媒脰碌陆芒路篓虏芒脢脭" << endl;
         auto dy = [](double x, double y)->double {
             return x - y + 1;
             };

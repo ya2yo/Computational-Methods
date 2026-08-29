@@ -1,10 +1,13 @@
 #include "Direct.h"
 
-// 高斯消去法实现
+#include <cmath>
+#include <utility>
+
+// 赂脽脣鹿脧没脠楼路篓脢碌脧脰
 void GaussianElimination::solve() {
     vector<vector<double>> matrix(n, vector<double>(n + 1));
 
-    // 构造增广矩阵
+    // 鹿鹿脭矛脭枚鹿茫戮脴脮贸
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
             matrix[i][j] = m_A[i][j];
@@ -12,9 +15,9 @@ void GaussianElimination::solve() {
         matrix[i][n] = m_B[i];
     }
 
-    // 前向消元
+    // 脟掳脧貌脧没脭陋
     for (int i = 0; i < n; i++) {
-        // 列主元选取
+        // 脕脨脰梅脭陋脩隆脠隆
         int maxRow = i;
         for (int k = i + 1; k < n; k++) {
             if (abs(matrix[k][i]) > abs(matrix[maxRow][i])) {
@@ -22,17 +25,17 @@ void GaussianElimination::solve() {
             }
         }
 
-        // 行交换
+        // 脨脨陆禄禄禄
         if (maxRow != i) {
             swap(matrix[i], matrix[maxRow]);
         }
 
-        // 检查主元
+        // 录矛虏茅脰梅脭陋
         if (abs(matrix[i][i]) < 1e-10) {
-            throw runtime_error("矩阵奇异，无法求解");
+            throw runtime_error("戮脴脮贸脝忙脪矛拢卢脦脼路篓脟贸陆芒");
         }
 
-        // 消元
+        // 脧没脭陋
         for (int k = i + 1; k < n; k++) {
             double factor = matrix[k][i] / matrix[i][i];
             for (int j = i; j <= n; j++) {
@@ -41,7 +44,7 @@ void GaussianElimination::solve() {
         }
     }
 
-    // 回代求解
+    // 禄脴麓煤脟贸陆芒
     for (int i = n - 1; i >= 0; i--) {
         ans[i] = matrix[i][n];
         for (int j = i + 1; j < n; j++) {
@@ -51,12 +54,12 @@ void GaussianElimination::solve() {
     }
 }
 
-// LU分解实现
+// LU路脰陆芒脢碌脧脰
 void LU_Decomposition::doolittleDecompose() {
     for (int i = 0; i < n; i++) {
         m_L[i][i] = 1.0;
 
-        // 计算U的第i行
+        // 录脝脣茫U碌脛碌脷i脨脨
         for (int j = i; j < n; j++) {
             m_U[i][j] = m_A[i][j];
             for (int k = 0; k < i; k++) {
@@ -64,7 +67,7 @@ void LU_Decomposition::doolittleDecompose() {
             }
         }
 
-        // 计算L的第i列
+        // 录脝脣茫L碌脛碌脷i脕脨
         for (int j = i + 1; j < n; j++) {
             m_L[j][i] = m_A[j][i];
             for (int k = 0; k < i; k++) {
@@ -78,7 +81,7 @@ void LU_Decomposition::doolittleDecompose() {
 void LU_Decomposition::solve() {
     doolittleDecompose();
 
-    // 解 L * y = B
+    // 陆芒 L * y = B
     vector<double> y(n);
     for (int i = 0; i < n; i++) {
         y[i] = m_B[i];
@@ -88,7 +91,7 @@ void LU_Decomposition::solve() {
         y[i] /= m_L[i][i];
     }
 
-    // 解 U * x = y
+    // 陆芒 U * x = y
     for (int i = n - 1; i >= 0; i--) {
         ans[i] = y[i];
         for (int j = i + 1; j < n; j++) {
@@ -98,11 +101,11 @@ void LU_Decomposition::solve() {
     }
 }
 
-// 追赶法实现
+// 脳路赂脧路篓脢碌脧脰
 ChaseMethod::ChaseMethod(const vector<double>& a, const vector<double>& b,
     const vector<double>& c, const vector<double>& d)
     : m_a(a), m_c(c), DirectMethod(vector<vector<double>>(), d) {
-    // 构造三对角矩阵（仅用于基类初始化）
+    // 鹿鹿脭矛脠媒露脭陆脟戮脴脮贸拢篓陆枚脫脙脫脷禄霉脌脿鲁玫脢录禄炉拢漏
     m_A.resize(n, vector<double>(n, 0.0));
     for (int i = 0; i < n; i++) {
         if (i > 0) m_A[i][i - 1] = a[i];
@@ -141,7 +144,7 @@ void ChaseMethod::solve() {
     }
 }
 
-// Cholesky分解实现
+// Cholesky路脰陆芒脢碌脧脰
 void CholeskyDecomposition::choleskyDecompose() {
     for (int i = 0; i < n; i++) {
         for (int j = 0; j <= i; j++) {
@@ -152,7 +155,7 @@ void CholeskyDecomposition::choleskyDecompose() {
                     sum += m_L[j][k] * m_L[j][k];
                 }
                 if (m_A[j][j] - sum <= 0) {
-                    throw runtime_error("矩阵不正定，无法进行Cholesky分解");
+                    throw runtime_error("戮脴脮贸虏禄脮媒露篓拢卢脦脼路篓陆酶脨脨Cholesky路脰陆芒");
                 }
                 m_L[j][j] = sqrt(m_A[j][j] - sum);
             }
@@ -165,7 +168,7 @@ void CholeskyDecomposition::choleskyDecompose() {
         }
     }
 
-    // 计算转置
+    // 录脝脣茫脳陋脰脙
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
             m_LT[i][j] = m_L[j][i];
@@ -176,7 +179,7 @@ void CholeskyDecomposition::choleskyDecompose() {
 void CholeskyDecomposition::solve() {
     choleskyDecompose();
 
-    // 前向替换：L * y = B
+    // 脟掳脧貌脤忙禄禄拢潞L * y = B
     vector<double> y(n);
     for (int i = 0; i < n; i++) {
         y[i] = m_B[i];
@@ -185,7 +188,7 @@ void CholeskyDecomposition::solve() {
         }
         y[i] /= m_L[i][i];
     }
-    // 后向替换：L^T * x = y
+    // 潞贸脧貌脤忙禄禄拢潞L^T * x = y
     for (int i = n - 1; i >= 0; i--) {
         ans[i] = y[i];
         for (int j = i + 1; j < n; j++) {

@@ -2,6 +2,8 @@
 #include <vector>
 #include <functional>
 #include <iostream>
+#include <cmath>
+#include <utility>
 using namespace std;
 class Romberg {
 private:

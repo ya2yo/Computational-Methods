@@ -1,7 +1,7 @@
 #include "CurveFit.h"
 double Data::evaluate(double z) const {
     if (factor.empty()) {
-        throw runtime_error("尚未计算拟合系数 (factor)!");
+        throw runtime_error("脡脨脦麓录脝脣茫脛芒潞脧脧碌脢媒 (factor)!");
     }
     double result = 0.0;
 
@@ -15,7 +15,7 @@ void Ordinary_Method::calculateFactor(int n) {
     factor.clear();
 
     if (n < 0 || n >= x.size()) {
-        throw runtime_error("多项式次数 n 不合理 (应在 0 到 数据点个数-1 之间)");
+        throw runtime_error("露脿脧卯脢陆麓脦脢媒 n 虏禄潞脧脌铆 (脫娄脭脷 0 碌陆 脢媒戮脻碌茫赂枚脢媒-1 脰庐录盲)");
     }
 
     Matrix A(n + 1, Vector(n + 1, 0.0));
@@ -55,7 +55,7 @@ void Orthogonal_Method::calculateCoefficients(int n) {
     beta.clear();
 
     if (n < 0 || n >= x.size()) {
-        throw runtime_error("多项式次数 n 不合理 (应在 0 到 数据点个数-1 之间)");
+        throw runtime_error("露脿脧卯脢陆麓脦脢媒 n 虏禄潞脧脌铆 (脫娄脭脷 0 碌陆 脢媒戮脻碌茫赂枚脢媒-1 脰庐录盲)");
     }
 
     int m = x.size(); 
@@ -100,7 +100,7 @@ void Orthogonal_Method::calculateCoefficients(int n) {
 
         if (i >= 2) {
             if (sum_phi_pprev_sq < 1e-12) {
-                throw runtime_error("正交多项式拟合中 Psi_{i-2} 平方和接近零，无法计算 beta。");
+                throw runtime_error("脮媒陆禄露脿脧卯脢陆脛芒潞脧脰脨 Psi_{i-2} 脝陆路陆潞脥陆脫陆眉脕茫拢卢脦脼路篓录脝脣茫 beta隆拢");
             }
             beta[i - 1] = sum_phi_prev_sq / sum_phi_pprev_sq;
         }
@@ -112,24 +112,24 @@ void Orthogonal_Method::calculateCoefficients(int n) {
         for (int k = 0; k < m; ++k) {
             double current_beta = (i == 1) ? 0.0 : beta[i - 1];
 
-            // 递推计算
+            // 碌脻脥脝录脝脣茫
             phi_curr[k] = (x[k] - alpha[i - 1]) * phi_prev[k] - current_beta * phi_pprev[k];
 
-            // 计算新的和
+            // 录脝脣茫脨脗碌脛潞脥
             sum_phi_curr_sq += phi_curr[k] * phi_curr[k];
             sum_y_phi += y[k] * phi_curr[k];
             sum_x_phi_sq += x[k] * phi_curr[k] * phi_curr[k];
         }
 
-        // 检查分母
+        // 录矛虏茅路脰脛赂
         if (sum_phi_curr_sq < 1e-12) {
-            throw runtime_error("正交多项式拟合中 Sum [Psi_i]^2 接近零，拟合终止。");
+            throw runtime_error("脮媒陆禄露脿脧卯脢陆脛芒潞脧脰脨 Sum [Psi_i]^2 陆脫陆眉脕茫拢卢脛芒潞脧脰脮脰鹿隆拢");
         }
 
-        // 3. 计算 c_i
+        // 3. 录脝脣茫 c_i
         factor[i] = sum_y_phi / sum_phi_curr_sq;
 
-        // 4. 计算 alpha_i (如果需要下一轮递推)
+        // 4. 录脝脣茫 alpha_i (脠莽鹿没脨猫脪陋脧脗脪禄脗脰碌脻脥脝)
         if (i < n) {
             alpha[i] = sum_x_phi_sq / sum_phi_curr_sq;
         }
@@ -150,7 +150,7 @@ void Orthogonal_Method::calculate(int n) {
 
 double Orthogonal_Method::evaluate(double z) const {
     if (factor.empty()) {
-        throw runtime_error("尚未计算拟合系数 (factor)!");
+        throw runtime_error("脡脨脦麓录脝脣茫脛芒潞脧脧碌脢媒 (factor)!");
     }
 
     int n = factor.size() - 1;
