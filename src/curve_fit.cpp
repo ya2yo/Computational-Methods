@@ -1,4 +1,4 @@
-#include "CurveFit.h"
+#include "curve_fit.h"
 
 double Data::evaluate(double z) const {
     if (factor.empty()) throw runtime_error("Fit coefficients have not been computed");

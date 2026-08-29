@@ -1,4 +1,4 @@
-#include "function_insert.h"
+#include "interpolation.h"
 
 // Compute the Lagrange basis polynomial L_k(x).
 double lagrangeBasis(int k, double val, const vector<double>& x_nodes) {

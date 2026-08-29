@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 
-#include "Direct.h"
+#include "direct_solvers.h"
 
 using namespace std;
 

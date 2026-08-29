@@ -1,4 +1,4 @@
-#include "linear_equations_iterative.h"
+#include "iterative_solvers.h"
 iterative_method::iterative_method(const vector<vector<double>>& A, const vector<double> &b, double diff)
     : m_A(A), m_B(b), n(static_cast<int>(b.size())), differ(diff) {}
 

@@ -1,6 +1,6 @@
-#include "Direct.h"
-#include "function_insert.h"
-#include "linear_equations_iterative.h"
+#include "direct_solvers.h"
+#include "interpolation.h"
+#include "iterative_solvers.h"
 #include "numerical_integration.h"
 
 #include <cassert>

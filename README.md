@@ -11,7 +11,7 @@ A modern C++ implementation of algorithms from a computational methods course. T
 - Numerical integration: Romberg integration
 - Ordinary differential equations: fourth-order Runge-Kutta
 
-The project follows a separated layout: public headers are in `include/computational_methods/`, implementations are in `src/`, the demonstration program is in `examples/`, and automated tests are in `tests/`.
+The project follows a separated layout: public headers are in `include/computational_methods/`, implementations are in `src/`, the demonstration program is in `examples/`, and automated tests are in `tests/`. File names use lowercase snake_case consistently.
 
 ## Build
 

@@ -1,10 +1,10 @@
-#include "function_insert.h"
+#include "interpolation.h"
 #include "numerical_integration.h"
-#include "linear_equations_iterative.h"
-#include "Direct.h"
-#include "Unary_Equation.h"
-#include "Ordinary_Differential_Equations.h"
-#include "CurveFit.h"
+#include "iterative_solvers.h"
+#include "direct_solvers.h"
+#include "root_finding.h"
+#include "ordinary_differential_equations.h"
+#include "curve_fit.h"
 double f2(double x) {
     return 0.5 * pow(10.0 - pow(x, 3), 0.5);
 }

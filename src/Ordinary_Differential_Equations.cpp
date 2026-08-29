@@ -1,4 +1,4 @@
-#include "Ordinary_Differential_Equations.h"
+#include "ordinary_differential_equations.h"
 
 BaseCondition::BaseCondition(double x, double y, double(*f)(double x, double y), double h, double maxn)
     : x0(x), y0(y), h(h), xn(maxn), dy(f) {

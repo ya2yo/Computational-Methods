@@ -1,4 +1,4 @@
-#include "Unary_Equation.h"
+#include "root_finding.h"
 #include <algorithm>
 #include <cmath>
 #include <iostream>

@@ -1,4 +1,4 @@
-#include "Direct.h"
+#include "direct_solvers.h"
 
 #include <cmath>
 #include <utility>

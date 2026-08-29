@@ -12,12 +12,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 add_library(computational_methods
-    src/CurveFit.cpp
-    src/Direct.cpp
-    src/Ordinary_Differential_Equations.cpp
-    src/Unary_Equation.cpp
-    src/function_insert.cpp
-    src/linear_equations_iterative.cpp
+    src/curve_fit.cpp
+    src/direct_solvers.cpp
+    src/ordinary_differential_equations.cpp
+    src/root_finding.cpp
+    src/interpolation.cpp
+    src/iterative_solvers.cpp
     src/numerical_integration.cpp
 )
 
