@@ -1,6 +1,7 @@
 #include "Ordinary_Differential_Equations.h"
 
-BaseCondition::BaseCondition(double x, double y, double(*f)(double x, double y),double h,double maxn):x0(x),y0(y),dy(f),h(h),xn(maxn) {
+BaseCondition::BaseCondition(double x, double y, double(*f)(double x, double y), double h, double maxn)
+    : x0(x), y0(y), h(h), xn(maxn), dy(f) {
 	int n = round((xn - x0) / h);
 	y_val.resize(n + 1);
 	y_val[0] = y0;

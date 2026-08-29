@@ -5,8 +5,8 @@
 // ¼ÆËãÀ­¸ñÀÊÈÕ»ùº¯Êý L_k(x)
 double lagrangeBasis(int k, double val, const vector<double>& x_nodes) {
     double result = 1.0;
-    for (int i = 0; i < x_nodes.size(); i++) {
-        if (i != k) {
+    for (std::size_t i = 0; i < x_nodes.size(); ++i) {
+        if (i != static_cast<std::size_t>(k)) {
             // L_k(x) = Prod_{i!=k} (x - x_i) / (x_k - x_i)
             result *= (val - x_nodes[i]) / (x_nodes[k] - x_nodes[i]);
         }

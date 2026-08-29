@@ -13,7 +13,7 @@ protected:
     int n;                       // ¾ØÕóÎ¬¶È
 public:
     DirectMethod(const vector<vector<double>>& A, const vector<double>& b)
-        : m_A(A), m_B(b), n(b.size()) {
+        : m_A(A), m_B(b), n(static_cast<int>(b.size())) {
         ans.resize(n, 0);
     }
     virtual void solve() = 0;

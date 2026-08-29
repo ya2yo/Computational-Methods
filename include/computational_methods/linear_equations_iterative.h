@@ -13,8 +13,8 @@ protected:
 	vector<vector<double>> m_A;//µü´ú¾ØÕó
 	vector<double> m_B;
 	vector<double> ans;
+	int n;
 	double differ;//µü´ú´ÎÊý
-	unsigned n;
 public:
 	//¹¹Ôìº¯Êý
 	iterative_method(const vector<vector<double>>& A, const vector<double>& b, double);

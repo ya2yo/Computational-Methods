@@ -14,7 +14,7 @@ double Data::evaluate(double z) const {
 void Ordinary_Method::calculateFactor(int n) {
     factor.clear();
 
-    if (n < 0 || n >= x.size()) {
+    if (n < 0 || static_cast<std::size_t>(n) >= x.size()) {
         throw runtime_error("¶àÏîÊ½´ÎÊý n ²»ºÏÀí (Ó¦ÔÚ 0 µ½ Êý¾Ýµã¸öÊý-1 Ö®¼ä)");
     }
 
@@ -54,7 +54,7 @@ void Orthogonal_Method::calculateCoefficients(int n) {
     alpha.clear();
     beta.clear();
 
-    if (n < 0 || n >= x.size()) {
+    if (n < 0 || static_cast<std::size_t>(n) >= x.size()) {
         throw runtime_error("¶àÏîÊ½´ÎÊý n ²»ºÏÀí (Ó¦ÔÚ 0 µ½ Êý¾Ýµã¸öÊý-1 Ö®¼ä)");
     }
 
