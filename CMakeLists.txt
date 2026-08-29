@@ -6,6 +6,7 @@ include(GNUInstallDirs)
 
 option(COMPUTATIONAL_METHODS_BUILD_TESTS "Build automated tests" ON)
 option(COMPUTATIONAL_METHODS_ENABLE_WARNINGS "Enable compiler warnings" ON)
+option(COMPUTATIONAL_METHODS_ENABLE_COVERAGE "Enable gcov coverage instrumentation" OFF)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -26,6 +27,11 @@ target_include_directories(computational_methods
         "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/computational_methods>"
         "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/computational_methods>"
 )
+
+if(COMPUTATIONAL_METHODS_ENABLE_COVERAGE AND CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    target_compile_options(computational_methods PRIVATE --coverage -O0 -g)
+    target_link_options(computational_methods PUBLIC --coverage)
+endif()
 
 if(COMPUTATIONAL_METHODS_ENABLE_WARNINGS)
     if(MSVC)

@@ -18,6 +18,7 @@ public:
     iterative_method(const vector<vector<double>>& A, const vector<double>& b, double tolerance);
     virtual void solve() = 0;
     void print() const;
+    vector<double> getSolution() const { return ans; }
     virtual ~iterative_method() {}
 };
 

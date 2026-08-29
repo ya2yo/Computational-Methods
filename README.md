@@ -41,4 +41,5 @@ cmake --build build
 - Use UTF-8 text and C++17.
 - Keep numerical algorithms separate from command-line demonstrations.
 - Run the build and tests before committing changes.
+- To enable GCC/Clang coverage instrumentation, configure with `-DCOMPUTATIONAL_METHODS_ENABLE_COVERAGE=ON`, then run `ctest` and use `gcovr` or `lcov` to generate a report.
 - Do not commit build directories, IDE settings, or generated binaries.
