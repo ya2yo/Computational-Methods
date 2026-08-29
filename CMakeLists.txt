@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.20)
 
 project(computational_methods VERSION 1.0.0 LANGUAGES CXX)
 
+include(GNUInstallDirs)
+
 option(COMPUTATIONAL_METHODS_BUILD_TESTS "Build automated tests" ON)
 option(COMPUTATIONAL_METHODS_ENABLE_WARNINGS "Enable compiler warnings" ON)
 
@@ -10,17 +12,19 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 add_library(computational_methods
-    "Computational Methods/CurveFit.cpp"
-    "Computational Methods/Direct.cpp"
-    "Computational Methods/Ordinary_Differential_Equations.cpp"
-    "Computational Methods/Unary_Equation.cpp"
-    "Computational Methods/function_insert.cpp"
-    "Computational Methods/linear_equations_iterative.cpp"
-    "Computational Methods/numerical_integration.cpp"
+    src/CurveFit.cpp
+    src/Direct.cpp
+    src/Ordinary_Differential_Equations.cpp
+    src/Unary_Equation.cpp
+    src/function_insert.cpp
+    src/linear_equations_iterative.cpp
+    src/numerical_integration.cpp
 )
 
-target_include_directories(computational_methods PUBLIC
-    "${CMAKE_CURRENT_SOURCE_DIR}/Computational Methods"
+target_include_directories(computational_methods
+    PUBLIC
+        "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/computational_methods>"
+        "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/computational_methods>"
 )
 
 if(COMPUTATIONAL_METHODS_ENABLE_WARNINGS)
@@ -31,7 +35,7 @@ if(COMPUTATIONAL_METHODS_ENABLE_WARNINGS)
     endif()
 endif()
 
-add_executable(computational_methods_demo "Computational Methods/main.cpp")
+add_executable(computational_methods_demo examples/main.cpp)
 target_link_libraries(computational_methods_demo PRIVATE computational_methods)
 
 include(CTest)
